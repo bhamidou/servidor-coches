@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Coche;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::controller(Coche::class)->group( function () {
+    Route::get('coches','show');
+    Route::post('coche','store');
+    Route::put('coche/{id}','update');
+    Route::delete('coche/{id}','destroy');
+});
