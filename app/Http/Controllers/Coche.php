@@ -11,7 +11,7 @@ class Coche extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**

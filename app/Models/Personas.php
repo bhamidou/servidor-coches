@@ -10,8 +10,8 @@ class Personas extends Model
     use HasFactory;
 
     protected $table = "personas";
-    // protected $primaryKey = "DNI";
-    // public $incrementing = false;
+    protected $primaryKey = "DNI";
+    public $incrementing = false;
     protected $fillable = [
         'DNI',
         'Nombre',
