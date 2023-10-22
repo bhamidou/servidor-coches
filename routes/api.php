@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Coche;
+use App\Http\Controllers\Persona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +21,17 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::controller(Coche::class)->group( function () {
-    Route::get('coches','show');
+    Route::get('coches','index');
     Route::post('coche','store');
     Route::put('coche/{id}','update');
     Route::delete('coche/{id}','destroy');
+});
+
+
+Route::controller(Persona::class)->group( function () {
+    Route::get('personas','index');
+    Route::get('personas/{id}','show');
+    Route::post('personas','store');
+    Route::put('personas/{id}','update');
+    Route::delete('personas/{id}','destroy');
 });

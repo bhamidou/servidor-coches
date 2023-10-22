@@ -7,6 +7,22 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## endpoints
+
+GET: api/personas
+
+POST: api/personas
+
+```json
+{
+    "DNI": "20A",
+    "Nombre": "Test",
+    "Tfno": "435",
+    "edad": 10
+}
+```
+
+
 
 ## License
 
