@@ -59,6 +59,13 @@ class Persona extends Controller
      */
     public function destroy(string $id)
     {
+        $delete = \DB::delete('delete from personas where DNI = ?', [$id]);
         
+        if ($delete) {
+            $rtnStr = "DELETED";
+        }else {
+            $rtnStr = "NOT DELETED";
+        }
+        return response()->json($rtnStr);
     }
 }
