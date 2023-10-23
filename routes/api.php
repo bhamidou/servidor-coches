@@ -46,7 +46,7 @@ Route::controller(Propiedad::class)->group( function () {
     Route::put('property/{id}','update');
     Route::delete('property/{id}','destroy');
 
-    Route::get('available-rents','index');
+    Route::get('available-car','index');
     Route::get('old-rents','showByID');
     Route::post('rent','store');
 })->middleware('login');

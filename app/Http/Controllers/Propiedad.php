@@ -10,16 +10,21 @@ class Propiedad extends Controller
      * Get all properties available
      */
     public function showById(Request $req){
-        $dni = $req->get("DNI");
 
-        $showRents = \DB::select('select * from propiedades where dni = ? and entregado = 1', [$dni]);
+        $arr = [
+            "Matricula" => $req->get("Matricula"),
+            "DNI" => $req->get("DNI"),
+    ];
+
+        $showRents = \DB::select('select *, (dias*(select precioDia from coches where Matricula = :Matricula))
+         as "Pagado" from propiedades where dni = :DNI and entregado = 1', $arr);
 
         return response()->json($showRents);
     }
 
     public function index()
     {
-        $cars = \DB::select('select * from coches where matricula =( select matricula from propiedades where entregado = 1)');
+        $cars = \DB::select('SELECT c.* FROM coches c LEFT JOIN propiedades p ON c.matricula = p.matricula WHERE p.matricula IS NULL OR p.entregado = 1 GROUP by c.Matricula');
         return response()->json($cars);
     }
 
@@ -36,25 +41,45 @@ class Propiedad extends Controller
         ];
             
         $numRentsQuery = \DB::select('SELECT count(entregado) as "NumOfRents" FROM propiedades WHERE dni = ? and entregado = 0 GROUP by entregado ', [$req->get("DNI")]);
-
-        $getNumRents = $numRentsQuery[0];
-
-        $numOfRents = $getNumRents->NumOfRents;
-
-        $rtnCar = "NOT RENTED PROPERTY";
+    
+        $rtnCar = "";
+        if($numRentsQuery != null){
+    
+            $getNumRents = $numRentsQuery[0];
+            
+            $numOfRents = $getNumRents->NumOfRents;
         
-        if($numOfRents<2){
+            if($numOfRents<2){
 
-            $checkCar = \DB::select('select * from coches where matricula = :Matricula', $newRent );
-            dd($checkCar);
-            if($checkCar){
+                $checkCar = \DB::select('select * from coches where matricula = ?', [$newRent["Matricula"]]);
 
-                $car = \DB::table('propiedades')->insert($newRent);
+                if($checkCar != null){
+                    $car = \DB::table('propiedades')->insert($newRent);
+                    if($car != null){
+                        $rtnCar = "RENTED PROPERTY";
+                    }
+
+                }else{
+                    $rtnCar = "MATRICULA NOT FOUND";
+                }
+
+            }else{
+                $showRents = \DB::select('select * from propiedades where dni = ? and entregado = 0', [$newRent["DNI"]]);
+                $rtnCar = ["ALERT" =>"MAX 2 CARS", "RENTED CARS" => $showRents];
             }
-        
-            if($car){
-                $rtnCar = "RENTED PROPERTY";
-            }
+        }else{
+
+                $checkCar = \DB::select('select * from coches where matricula = ?', [$newRent["Matricula"]]);
+
+                if($checkCar != null){
+                    $car = \DB::table('propiedades')->insert($newRent);
+                    if($car != null){
+                        $rtnCar = "RENTED PROPERTY";
+                    }
+
+                }else{
+                    $rtnCar = "MATRICULA NOT FOUND";
+                }
         }
 
         

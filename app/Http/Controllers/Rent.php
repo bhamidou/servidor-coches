@@ -13,13 +13,14 @@ class Rent extends Controller
         $selectRend= [
             "DNI" => $req->get("DNI"),
             "Matricula" => $req->get("Matricula"),
-            "Matricula2" => $req->get("Matricula")
+            "Matricula2" => $req->get("Matricula"),
+            "Matricula3" => $req->get("Matricula")
         ];
 
         $selectCar = \DB::select('select
          (dias*((select precioDia from coches where Matricula = :Matricula2))) 
-        as "Precio a pagar" , dias, DNI, Matricula
-         from propiedades where DNI = :DNI and Matricula = :Matricula', $selectRend);
+        as "Precio a pagar", (select precioDia from coches where Matricula = :Matricula3) as "Precio dia" , dias, DNI, Matricula 
+         from propiedades where DNI = :DNI and Matricula = :Matricula and entregado = 0', $selectRend);
        
         $updateCar = \DB::table('propiedades')->where('Matricula','=', $selectRend["Matricula"])
         ->where('DNI','=', $selectRend["DNI"])
