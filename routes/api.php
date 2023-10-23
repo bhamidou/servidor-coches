@@ -49,11 +49,12 @@ Route::controller(Propiedad::class)->group( function () {
     Route::delete('property/{id}','destroy');
 })->middleware('login');
 
-Route::get('ranking',[Rent::class,'ranking'])->middleware('login');
 
 Route::controller(Rent::class)->group( function () {
-    Route::get('returnRent','returnRentedCar');
-    Route::get('rent','show');
-    Route::get('rent/{matricula}','rentCar');
+    Route::get('return-car','returnRentedCar');
+    Route::get('rents','show');
+    Route::post('rent/{matricula}','rentCar');
+    
+    Route::get('ranking','ranking');
 
 })->middleware('login');
