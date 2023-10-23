@@ -51,7 +51,7 @@ class Persona extends Controller
         $edad = strval($req->get("edad"));
 
         $update = \DB::select('update personas set DNI = ? , Nombre = ? , Tfno = ? , edad = ?  where DNI = ?', [$dni,$nombre, $tfno, $edad, $id]);
-        return response()->json($update); //update no me devuelve nada
+        return response()->json($update); // the var update don't get me anything
     }
 
     /**

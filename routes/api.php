@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Coche;
 use App\Http\Controllers\Persona;
+use App\Http\Controllers\Propiedad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,18 +22,31 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::get('ranking',[Coche::class,'ranking'])->middleware('login');
+
 Route::controller(Coche::class)->group( function () {
-    Route::get('coches','index');
-    Route::post('coche','store');
-    Route::put('coche/{id}','update');
-    Route::delete('coche/{id}','destroy');
-});
+    // Route::get('car','index');
+    Route::get('car/{matricula}','show');
+    Route::post('car','store');
+    Route::put('car/{id}','update');
+    Route::delete('car/{id}','destroy');
+})->middleware('login');
 
 
 Route::controller(Persona::class)->group( function () {
-    Route::get('personas','index');
-    Route::get('personas/{id}','show');
-    Route::post('personas','store');
-    Route::put('personas/{id}','update');
-    Route::delete('personas/{id}','destroy');
-});
+    Route::get('users','index');
+    Route::get('user/{id}','show');
+    Route::post('user','store');
+    Route::put('user/{id}','update');
+    Route::delete('user/{id}','destroy');
+})->middleware('login');
+
+Route::controller(Propiedad::class)->group( function () {
+    Route::get('properties','index');
+    Route::get('property/{id}','show');
+    Route::post('property','store');
+    Route::put('property/{id}','update');
+    Route::delete('property/{id}','destroy');
+    Route::get('returnRent','returnRentedCar');
+})->middleware('login');
+
