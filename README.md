@@ -162,10 +162,6 @@ A continuación se describen los endpoints de una API utilizando el framework de
 - **Controlador:** `Rent::class`
 - **Método del Controlador:** `ranking`
 
-Todos los endpoints requieren autenticación a través del middleware 'login' para acceder a ellos. Asegúrate de proporcionar las credenciales adecuadas al realizar solicitudes a estos endpoints.
-
-Ten en cuenta que los parámetros como `{matricula}` e `{id}` deben ser reemplazados por los valores reales que desees utilizar en tus solicitudes.
-
 
 
 
