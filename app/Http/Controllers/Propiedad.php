@@ -68,22 +68,4 @@ class Propiedad extends Controller
         return response()->json($car);
     }
 
-    public function returnRentedCar(Request $req){
-        $selectRend= [
-            "DNI" => $req->get("DNI"),
-            "Matricula" => $req->get("Matricula"),
-            "Matricula2" => $req->get("Matricula")
-        ];
-
-        $selectCar = \DB::select('select
-         (dias*((select precioDia from coches where Matricula = :Matricula2))) 
-        as "Precio a pagar" , dias, DNI, Matricula
-         from propiedades where DNI = :DNI and Matricula = :Matricula', $selectRend);
-       
-        $updateCar = \DB::table('propiedades')->where('Matricula','=', $selectRend["Matricula"])
-        ->where('DNI','=', $selectRend["DNI"])
-        ->update( ["entregado" => 1]);
-        
-        return response()->json($selectCar);
-    }
 }

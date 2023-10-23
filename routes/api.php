@@ -3,6 +3,7 @@
 use App\Http\Controllers\Coche;
 use App\Http\Controllers\Persona;
 use App\Http\Controllers\Propiedad;
+use App\Http\Controllers\Rent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,10 +23,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('ranking',[Coche::class,'ranking'])->middleware('login');
 
 Route::controller(Coche::class)->group( function () {
-    // Route::get('car','index');
+    Route::get('car','index');
     Route::get('car/{matricula}','show');
     Route::post('car','store');
     Route::put('car/{id}','update');
@@ -47,6 +47,13 @@ Route::controller(Propiedad::class)->group( function () {
     Route::post('property','store');
     Route::put('property/{id}','update');
     Route::delete('property/{id}','destroy');
-    Route::get('returnRent','returnRentedCar');
 })->middleware('login');
 
+Route::get('ranking',[Rent::class,'ranking'])->middleware('login');
+
+Route::controller(Rent::class)->group( function () {
+    Route::get('returnRent','returnRentedCar');
+    Route::get('rent','show');
+    Route::get('rent/{matricula}','rentCar');
+
+})->middleware('login');
