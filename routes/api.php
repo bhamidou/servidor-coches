@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::controller(Coche::class)->group( function () {
-    Route::get('car','index');
+    Route::get('cars','index');
     Route::get('car/{matricula}','show');
     Route::post('car','store');
     Route::put('car/{id}','update');
@@ -42,17 +42,18 @@ Route::controller(Persona::class)->group( function () {
 })->middleware('login');
 
 Route::controller(Propiedad::class)->group( function () {
-    Route::get('properties','index');
     Route::get('property/{id}','show');
-    Route::post('property','store');
     Route::put('property/{id}','update');
     Route::delete('property/{id}','destroy');
+
+    Route::get('available-car','index');
+    Route::get('old-rents','showByID');
+    Route::post('rent','store');
 })->middleware('login');
 
 
 Route::controller(Rent::class)->group( function () {
     Route::get('return-car','returnRentedCar');
-    Route::get('rents','show');
     Route::post('rent/{matricula}','rentCar');
     
     Route::get('ranking','ranking');
