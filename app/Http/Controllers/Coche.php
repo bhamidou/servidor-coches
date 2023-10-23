@@ -21,14 +21,22 @@ class Coche extends Controller
      */
     public function store(Request $req)
     {
-        $storeCar = [
-            "Matricual" => $req->get("Matricual"),
-            "Marca" => $req->get("Marca"),
-            "Modelo" => $req->get("Modelo"),
-            "precioDia" => $req->get("precioDia"),
-        ];
-        $store = \DB::insert('inser into coches (Matricula, Marca, Modelo, precioDia) values (?,?,?,?)')->get();
-        return response()->json($store);
+        $precio = $req->get('precio');
+        $MAX = 100;
+
+        $storeMsg = "NOT UPDATED PRICE";
+
+        if ($precio <= $MAX) {
+            $storeCar = [
+                "Matricual" => $req->get("Matricula"),
+                "Marca" => $req->get("Marca"),
+                "Modelo" => $req->get("Modelo"),
+                "precioDia" => $req->get("precioDia"),
+            ];
+
+            $storeMsg = \DB::insert('inser into coches (Matricula, Marca, Modelo, precioDia) values (?,?,?,?)', $storeCar)->get();
+        }
+        return response()->json($storeMsg);
     }
 
     /**
@@ -36,7 +44,7 @@ class Coche extends Controller
      */
     public function show(string $matricula)
     {
-        $coche = \DB::table('coches')->where('matricula',$matricula)->get();
+        $coche = \DB::table('coches')->where('matricula', $matricula)->get();
         return response()->json($coche);
     }
 
@@ -49,9 +57,9 @@ class Coche extends Controller
         $MAX = 100;
 
         $coche = "NOT UPDATED PRICE";
-        
-        if($precio<=$MAX){
-            $coche = \DB::table('coches')->where('matricula', '=',$matricula)->update(["precioDia"=> $precio]);
+
+        if ($precio <= $MAX) {
+            $coche = \DB::table('coches')->where('matricula', '=', $matricula)->update(["precioDia" => $precio]);
             $coche = Coche::show($matricula);
         }
         return response()->json($coche);
@@ -63,10 +71,5 @@ class Coche extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function ranking(){
-        $rank = \DB::table('propiedades')->orderBy('dias','desc')->get();
-        return response()->json($rank);
     }
 }
