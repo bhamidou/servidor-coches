@@ -9,9 +9,17 @@ class Propiedad extends Controller
     /**
      * Get all properties available
      */
+    public function showById(Request $req){
+        $dni = $req->get("DNI");
+
+        $showRents = \DB::select('select * from propiedades where dni = ? and entregado = 1', [$dni]);
+
+        return response()->json($showRents);
+    }
+
     public function index()
     {
-        $cars = \DB::table('propiedades')->where('disponible',1)->get();
+        $cars = \DB::select('select * from coches where matricula =( select matricula from propiedades where entregado = 1)');
         return response()->json($cars);
     }
 
@@ -20,18 +28,36 @@ class Propiedad extends Controller
      */
     public function store(Request $req)
     {
-        $newProperty = [
+        $newRent = [
             "DNI" => strval($req->get("DNI")),
             "Matricula" => strval($req->get("Matricula")),
             "dias" => 0,
             "entregado" => 0
         ];
             
-        $car = \DB::table('propiedades')->insert($newProperty);
+        $numRentsQuery = \DB::select('SELECT count(entregado) as "NumOfRents" FROM propiedades WHERE dni = ? and entregado = 0 GROUP by entregado ', [$req->get("DNI")]);
+
+        $getNumRents = $numRentsQuery[0];
+
+        $numOfRents = $getNumRents->NumOfRents;
+
         $rtnCar = "NOT RENTED PROPERTY";
-        if($car){
-            $rtnCar = "RENTED PROPERTY";
+        
+        if($numOfRents<2){
+
+            $checkCar = \DB::select('select * from coches where matricula = :Matricula', $newRent );
+            dd($checkCar);
+            if($checkCar){
+
+                $car = \DB::table('propiedades')->insert($newRent);
+            }
+        
+            if($car){
+                $rtnCar = "RENTED PROPERTY";
+            }
         }
+
+        
         return response()->json($rtnCar);
     }
 

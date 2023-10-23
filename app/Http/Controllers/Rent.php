@@ -6,35 +6,8 @@ use Illuminate\Http\Request;
 
 class Rent extends Controller
 {
-    public function show(Request $req){
-        $dni = $req->get("DNI");
-
-        $showRents = \DB::select('select * from propiedades where dni = ? and entregado = 1', [$dni]);
-
-        return response()->json($showRents);
-    }
-    public function rentCar(Request $req){
-
-        $numRentsQeury = \DB::select('SELECT count(entregado) as "NumOfRents" FROM propiedades WHERE dni = ? and entregado = 0 GROUP by entregado ', [$req->get("DNI")]);
-        // $num = $numRents[0]->NumOfRent;
-        $getNumRents = $numRentsQeury[0];
-
-        $numOfRents = $getNumRents->NumOfRents;
-        
-        if($numOfRents>2){
-            $rtnMsg = $numRentsQeury;
-
-        }else{
-            $insertRent = [
-                "DNI" => $req->get("DNI"),
-                "Matricula" => $req->get("Matricula")
-            ];
-
-            $rtnMsg = \DB::insert('insert into propiedades (DNI, Matricula, dias,entregado) values (:DNI, :Matricula,0,0)', $insertRent);
-        }
-        
-        return response()->json($rtnMsg);
-    }
+    
+   
 
     public function returnRentedCar(Request $req){
         $selectRend= [
