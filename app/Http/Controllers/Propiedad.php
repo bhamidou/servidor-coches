@@ -24,7 +24,7 @@ class Propiedad extends Controller
 
     public function index()
     {
-        $cars = \DB::select('SELECT c.* FROM coches c LEFT JOIN propiedades p ON c.matricula = p.matricula WHERE p.matricula IS NULL OR p.entregado = 1 GROUP by c.Matricula');
+        $cars = \DB::select('SELECT * FROM coches WHERE matricula NOT IN ( SELECT matricula from propiedades WHERE entregado = 1)');
         return response()->json($cars);
     }
 
